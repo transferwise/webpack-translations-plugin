@@ -1,0 +1,71 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:latest
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: Install dependencies
+          command: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+  test:
+    docker:
+      - image: circleci/node:latest
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: Test
+          command: npm test
+  # release-to-github:
+  #   docker:
+  #     - image: circleci/node:latest
+  #   steps:
+  #     - checkout
+  #     - restore_cache:
+  #         key: dependency-cache-{{ checksum "package.json" }}
+  #     - attach_workspace:
+  #         at: .
+  #     - run:
+  #         name: Release to GitHub
+  #         command: npm run release-to-github
+  # publish-on-npm:
+  #   docker:
+  #     - image: circleci/node:latest
+  #   steps:
+  #     - checkout
+  #     - attach_workspace:
+  #         at: .
+  #     - run:
+  #         name: Publish on npm
+  #         command: |
+  #           echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+  #           npm publish --access=public
+
+workflows:
+  version: 2
+  install-test-and-release:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+      # - release-to-github:
+      #     requires:
+      #       - test
+      #     filters:
+      #       branches:
+      #         only: master
+      # - publish-on-npm:
+      #     requires:
+      #       - test
+      #     filters:
+      #       branches:
+      #         only: master

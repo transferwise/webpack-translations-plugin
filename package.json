@@ -5,10 +5,12 @@
   "main": "index.js",
   "scripts": {
     "precommit": "lint-staged",
-    "test": "npm run lint && npm run check-format",
+    "test": "npm run check-release-to-github && npm run lint && npm run check-format",
     "format": "prettier-eslint \"**/*.js\" --write",
     "lint": "eslint index.js lib",
-    "check-format": "prettier-eslint \"{src,docs}/**/*.js\" --list-different"
+    "check-format": "prettier-eslint \"**/*.js\" --list-different",
+    "check-release-to-github": "release-to-github-with-changelog-pre-release-checks",
+    "release-to-github": "release-to-github-with-changelog"
   },
   "repository": {
     "type": "git",
@@ -38,7 +40,8 @@
     "husky": "^0.14.3",
     "lint-staged": "^7.0.0",
     "prettier": "^1.11.1",
-    "prettier-eslint-cli": "^4.7.1"
+    "prettier-eslint-cli": "^4.7.1",
+    "release-to-github-with-changelog": "^1.1.5"
   },
   "lint-staged": {
     "*.js": [
