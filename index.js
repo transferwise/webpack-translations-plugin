@@ -1,1 +1,3 @@
-console.log('Hello world');
+const WebpackTranslationsPlugin = require('./lib/WebpackTranslationsPlugin');
+
+module.exports = WebpackTranslationsPlugin;
