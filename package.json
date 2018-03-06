@@ -1,0 +1,28 @@
+{
+  "name": "webpack-translations-plugin",
+  "version": "0.1.0",
+  "description": "A plugin to create separate bundles for each of your supported languages, with reasonable defaults. #0CJS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/transferwise/webpack-translations-plugin.git"
+  },
+  "keywords": [
+    "webpack",
+    "plugin",
+    "translations",
+    "messages",
+    "i18n",
+    "transferwise",
+    "0cjs"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/transferwise/webpack-translations-plugin/issues"
+  },
+  "homepage": "https://github.com/transferwise/webpack-translations-plugin#readme"
+}

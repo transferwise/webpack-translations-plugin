@@ -1,1 +1,1 @@
-# webpack-translations-plugin
+# Webpack Translations Plugin
