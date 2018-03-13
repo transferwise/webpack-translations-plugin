@@ -1,3 +1,6 @@
+# v0.2.1
+## Retriggers for README on npm
+
 # v0.2.0
 ## Adds WebpackTranslationsPlugin
 
