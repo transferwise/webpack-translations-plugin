@@ -28,7 +28,6 @@ describe('Webpack translations plugin', () => {
 
     runWebpackWithPluginOptions(options, () => {
       expect(translationsForAllLanguages()).toEqual({
-        containsAllLanguages: true,
         en: {
           fries: 'Chips',
         },
@@ -38,14 +37,12 @@ describe('Webpack translations plugin', () => {
       });
 
       expect(translationsForLanguage('en')).toEqual({
-        language: 'en',
         en: {
           fries: 'Chips',
         },
       });
 
       expect(translationsForLanguage('en-US')).toEqual({
-        language: 'en-US',
         'en-US': {
           fries: 'French fries',
         },

@@ -141,30 +141,28 @@ describe('Webpack translations plugin', () => {
     return [
       {
         name: 'a-script-file.js',
-        content:
-          'module.exports = {"containsAllLanguages":true,"en":{"fries":"Chips"},"en-US":{"fries":"French fries"}};',
+        content: 'module.exports = {"en":{"fries":"Chips"},"en-US":{"fries":"French fries"}};',
       },
       {
         name: 'another-script-file.js',
-        content:
-          'module.exports = {"containsAllLanguages":true,"en":{"fries":"Chips"},"en-US":{"fries":"French fries"}};',
+        content: 'module.exports = {"en":{"fries":"Chips"},"en-US":{"fries":"French fries"}};',
       },
       { name: 'index.html', content: '<html></html>' },
       {
         name: 'a-script-file.en.js',
-        content: 'module.exports = {"language":"en","en":{"fries":"Chips"}};',
+        content: 'module.exports = {"en":{"fries":"Chips"}};',
       },
       {
         name: 'a-script-file.en-US.js',
-        content: 'module.exports = {"language":"en-US","en-US":{"fries":"French fries"}};',
+        content: 'module.exports = {"en-US":{"fries":"French fries"}};',
       },
       {
         name: 'another-script-file.en.js',
-        content: 'module.exports = {"language":"en","en":{"fries":"Chips"}};',
+        content: 'module.exports = {"en":{"fries":"Chips"}};',
       },
       {
         name: 'another-script-file.en-US.js',
-        content: 'module.exports = {"language":"en-US","en-US":{"fries":"French fries"}};',
+        content: 'module.exports = {"en-US":{"fries":"French fries"}};',
       },
     ];
   }

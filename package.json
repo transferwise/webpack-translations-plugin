@@ -1,6 +1,6 @@
 {
   "name": "webpack-translations-plugin",
-  "version": "0.2.1",
+  "version": "1.0.0",
   "description": "A plugin to create separate bundles for each of your supported languages, with reasonable defaults. #0CJS",
   "main": "index.js",
   "files": [

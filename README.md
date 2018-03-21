@@ -39,12 +39,15 @@ export default {
 ```javascript
 import translations from 'translations';
 
-if (translations.containsAllLanguages) {
+const languages = Object.keys(translations);
+
+if (languages.length === 1) {
+  // we only have one translation object
+  const language = languages[0];
+  console.log(translations[language]['a.translation.key']);
+} else {
   // we have all translations objects, so f.e. we can do:
   console.log(translations['en-US']['a.translation.key']);
-} else {
-  // we only have one translation object that we can retrieve by using the language property
-  console.log(translations[translations.language]['a.translation.key']);
 }
 ```
 
@@ -91,7 +94,6 @@ where `main.js` contain all the translations, so `'translations'` resolves as:
 
 ```javascript
 {
-  "containsAllLanguages": true,
   "en": {
     ...
   },
@@ -108,7 +110,6 @@ and `main.en.js`, `main.en-US.js` and `main.it.js` contain only the specific tra
 
 ```javascript
 {
-  "language": "en-US",
   "en-US": {
     ...
   }
