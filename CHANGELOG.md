@@ -1,3 +1,10 @@
+# v1.1.0
+## Adds a `development` option for webpack-dev-server, bundles under `source` key if only source translations file exists
+
+When the `development` option is set, the exported value will be double escaped to work with webpack-dev-server's `eval` behaviour.
+When no `messages.*.json` file exists, but `messages.json` does, a bundle will be built with the default filename,
+containing translations under the `"source"` key.
+
 # v1.0.0
 ## Stops adding `containsAllLanguages` and `language` properties to resolved `translations`
 

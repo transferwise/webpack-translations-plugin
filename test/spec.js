@@ -90,6 +90,20 @@ describe('Webpack translations plugin', () => {
     expectStructureWithOptionsToProduceExpectedAssets(structure, options);
   });
 
+  it('resolves the translations module as "source" language from translations/messages.json when in development mode with extra escaping to function with eval', () => {
+    const structure = {
+      'a-context': {
+        translations: {
+          'messages.json': '{ "fries": "Fries" }',
+        },
+      },
+    };
+    const options = { development: true };
+
+    expectStructureWithOptionsToCallExternalsPluginForModule(structure, options, 'translations');
+    expectStructureWithOptionsToProduceExpectedEscapedAssets(structure, options);
+  });
+
   function expectStructureWithOptionsToCallExternalsPluginForModule(structure, options, module) {
     fs.__setMockFiles(structure);
 
@@ -108,6 +122,20 @@ describe('Webpack translations plugin', () => {
   }
 
   function expectStructureWithOptionsToProduceExpectedAssets(structure, options) {
+    expectStructureWithOptionsToProduceAssets(structure, options, getExpectedAssets());
+  }
+
+  function expectStructureWithOptionsToProduceExpectedEscapedAssets(structure, options) {
+    expectStructureWithOptionsToProduceAssets(structure, options, getExpectedEscapedAssets());
+  }
+
+  function expectStructureWithOptionsToProduceAssets(structure, options, assets) {
+    const compilation = getPluginCompilationForStructureAndOptions(structure, options);
+
+    expectAssetsToEqual(compilation.assets, assets);
+  }
+
+  function getPluginCompilationForStructureAndOptions(structure, options) {
     fs.__setMockFiles(structure);
 
     const compilation = getDefaultCompilation();
@@ -124,9 +152,7 @@ describe('Webpack translations plugin', () => {
 
     new WebpackTranslationsPlugin(options).apply(compiler);
 
-    const expectedAssets = getExpectedAssets();
-
-    expectAssetsToEqual(compilation.assets, expectedAssets);
+    return compilation;
   }
 
   function getDefaultCompilation() {
@@ -164,6 +190,20 @@ describe('Webpack translations plugin', () => {
         name: 'another-script-file.en-US.js',
         content: 'module.exports = {"en-US":{"fries":"French fries"}};',
       },
+    ];
+  }
+
+  function getExpectedEscapedAssets() {
+    return [
+      {
+        name: 'a-script-file.js',
+        content: 'module.exports = {\\"source\\":{\\"fries\\":\\"Fries\\"}};',
+      },
+      {
+        name: 'another-script-file.js',
+        content: 'module.exports = {\\"source\\":{\\"fries\\":\\"Fries\\"}};',
+      },
+      { name: 'index.html', content: '<html></html>' },
     ];
   }
 

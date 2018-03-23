@@ -28,11 +28,12 @@ export default {
 
 `WebpackTranslationsPlugin` takes an optional `options` object for configuration:
 
-| Option         | Description                                                    |          Default |
-|----------------|----------------------------------------------------------------|-----------------:|
-| `directory`    | containing translation JSONs                                   |   `translations` |
-| `fileNameBase` | for translation JSONs (source file name without the extension) |       `messages` |
-| `moduleName`   | will resolve as the translations object                        |   `translations` |
+| Option         | Description                                                                                      |          Default |
+|----------------|--------------------------------------------------------------------------------------------------|-----------------:|
+| `directory`    | containing translation JSONs                                                                     |   `translations` |
+| `fileNameBase` | for translation JSONs (source file name without the extension)                                   |       `messages` |
+| `moduleName`   | will resolve as the translations object                                                          |   `translations` |
+| `development`  | if `true`, will double escape the strings to work with webpack-dev-server                        |          `false` |
 
 ### Source files
 
@@ -52,6 +53,8 @@ if (languages.length === 1) {
 ```
 
 ### File tree example
+
+#### With translation files
 
 ```bash
 .
@@ -111,6 +114,40 @@ and `main.en.js`, `main.en-US.js` and `main.it.js` contain only the specific tra
 ```javascript
 {
   "en-US": {
+    ...
+  }
+}
+```
+
+#### With only the source file
+
+```bash
+.
+├── node_modules
+├── translations
+│   └── messages.json
+├── package.json
+└── webpack.config.js
+```
+
+No `options` object needs to be passed, as we're using the default values. The following will be built:
+
+```bash
+.
+├── dist
+│   └── main.js
+├── node_modules
+├── translations
+│   └── messages.json
+├── package.json
+└── webpack.config.js
+```
+
+where `main.js` contain the source translations, under the `"source"` key:
+
+```javascript
+{
+  "source": {
     ...
   }
 }
