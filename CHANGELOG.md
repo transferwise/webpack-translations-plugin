@@ -1,3 +1,6 @@
+# v1.1.1
+## Fixes `main.js` returning `__TRANSLATIONS_MODULE_STRING_TO_BE_REPLACED__`
+
 # v1.1.0
 ## Adds a `development` option for webpack-dev-server, bundles under `source` key if only source translations file exists
 
