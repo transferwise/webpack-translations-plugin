@@ -8,7 +8,11 @@ const testFilesDirectory = path.resolve(__dirname, 'testFiles');
 
 describe('Webpack translations plugin', () => {
   beforeEach(createTestFilesDirectory);
-  afterEach(removeTestFilesDirectory);
+  afterEach(() => {
+    removeTestFilesDirectory();
+    jest.resetModules();
+  });
+
   it('creates correct assets with only a base file', done => {
     createFileTreeWithContent({
       src: { 'index.js': "module.exports = require('source-only')" },
