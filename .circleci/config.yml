@@ -1,69 +1,56 @@
+defaults: &defaults
+  working_directory: ~/webpack-translations-plugin
+  docker:
+    - image: circleci/node:latest
 version: 2
 jobs:
-  build:
-    docker:
-      - image: circleci/node:latest
+  dependencies:
+    <<: *defaults
     steps:
       - checkout
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
       - run:
           name: Install dependencies
-          command: npm install
-      - save_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
+          command: npm ci
+      - persist_to_workspace:
+          root: .
           paths:
-            - node_modules
+            - '*'
   test:
-    docker:
-      - image: circleci/node:latest
+    <<: *defaults
     steps:
-      - checkout
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
+      - attach_workspace:
+          at: ~/webpack-translations-plugin
       - run:
           name: Test
           command: npm test
-  release-to-github:
-    docker:
-      - image: circleci/node:latest
+  release:
+    <<: *defaults
     steps:
-      - checkout
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
       - attach_workspace:
-          at: .
+          at: ~/webpack-translations-plugin
+      - run:
+          name: Setup npm token
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN_PUBLISH" >> ~/.npmrc
       - run:
           name: Release to GitHub
-          command: npm run release-to-github
-  publish-on-npm:
-    docker:
-      - image: circleci/node:latest
-    steps:
-      - checkout
-      - attach_workspace:
-          at: .
+          command: |
+            mkdir ~/.ssh
+            ssh-keyscan github.com >> ~/.ssh/known_hosts
+            npm run release-to-github
       - run:
           name: Publish on npm
-          command: |
-            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-            npm publish --access=public
+          command: npm publish --access=public
 
 workflows:
   version: 2
-  install-test-and-release:
+  dependencies-test-release:
     jobs:
-      - build
+      - dependencies
       - test:
           requires:
-            - build
-      - release-to-github:
-          requires:
-            - test
-          filters:
-            branches:
-              only: master
-      - publish-on-npm:
+            - dependencies
+      - release:
+          context: frontend-publish
           requires:
             - test
           filters:
