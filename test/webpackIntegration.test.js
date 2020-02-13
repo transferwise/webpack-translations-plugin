@@ -8,7 +8,59 @@ const testFilesDirectory = path.resolve(__dirname, 'testFiles');
 
 describe('Webpack translations plugin', () => {
   beforeEach(createTestFilesDirectory);
-  afterEach(removeTestFilesDirectory);
+  afterEach(() => {
+    removeTestFilesDirectory();
+    jest.resetModules();
+  });
+
+  it('creates correct assets with only a base file', done => {
+    createFileTreeWithContent({
+      src: { 'index.js': "module.exports = require('source-only')" },
+      'source-only': {
+        'messages.json': '{ "fries": "Fries" }',
+      },
+    });
+
+    const options = {
+      moduleName: 'source-only',
+      directory: 'source-only',
+    };
+
+    runWebpackWithPluginOptions(options, () => {
+      expect(translationsForAllLanguages()).toEqual({
+        source: {
+          fries: 'Fries',
+        },
+      });
+
+      done();
+    });
+  });
+
+  it('creates correct assets with a base file and an en file', done => {
+    createFileTreeWithContent({
+      src: { 'index.js': "module.exports = require('one-locale')" },
+      'one-locale': {
+        'messages.json': '{ "fries": "Fries" }',
+        'messages.en.json': '{ "fries": "Chips" }',
+      },
+    });
+
+    const options = {
+      moduleName: 'one-locale',
+      directory: 'one-locale',
+    };
+
+    runWebpackWithPluginOptions(options, () => {
+      expect(translationsForAllLanguages()).toEqual({
+        en: {
+          fries: 'Chips',
+        },
+      });
+
+      done();
+    });
+  });
 
   it('creates correct assets with specified module name, directory and file name base', done => {
     createFileTreeWithContent({
@@ -17,6 +69,8 @@ describe('Webpack translations plugin', () => {
         'new-file-name-base.json': '{ "fries": "Fries" }',
         'new-file-name-base.en.json': '{ "fries": "Chips" }',
         'new-file-name-base.en-US.json': '{ "fries": "French fries" }',
+        'new-file-name-base.fr.json': '{ "fries": "Pomme frites" }',
+        'new-file-name-base.de.json': '{ "fries": "Fritten" }',
       },
     });
 
@@ -34,6 +88,12 @@ describe('Webpack translations plugin', () => {
         'en-US': {
           fries: 'French fries',
         },
+        fr: {
+          fries: 'Pomme frites',
+        },
+        de: {
+          fries: 'Fritten',
+        },
       });
 
       expect(translationsForLanguage('en')).toEqual({
@@ -45,6 +105,18 @@ describe('Webpack translations plugin', () => {
       expect(translationsForLanguage('en-US')).toEqual({
         'en-US': {
           fries: 'French fries',
+        },
+      });
+
+      expect(translationsForLanguage('fr')).toEqual({
+        fr: {
+          fries: 'Pomme frites',
+        },
+      });
+
+      expect(translationsForLanguage('de')).toEqual({
+        de: {
+          fries: 'Fritten',
         },
       });
 
