@@ -1,3 +1,6 @@
+# v1.1.2
+## Update package-lock.json
+
 # v1.1.1
 ## Fixes `main.js` returning `__TRANSLATIONS_MODULE_STRING_TO_BE_REPLACED__`
 
